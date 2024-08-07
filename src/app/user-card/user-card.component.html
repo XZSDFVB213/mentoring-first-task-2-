@@ -1,0 +1,13 @@
+ <div class="user-card">
+  <div class="user-card__id">
+    {{user.id}}
+  </div>
+  <div class="user-card__name">
+    <strong>{{user.name}}</strong>
+    <span>{{user.username}}</span>
+  </div>
+  <div class="user-card__email">{{user.email}}</div>
+   <button mat-raised-button (click)="openDialog()">Изменить</button>
+   <button class="user-card__btn-del" (click)="btnDelClick()">Удалить пользователя</button>
+</div>
+

@@ -1,0 +1,23 @@
+<form [formGroup]="newForm" class="modal-window">
+  <label class="modal-window__input" for="id">Id:</label>
+  <input class="modal-window__input" id="id" formControlName="id" type="number">
+  <div *ngIf="newForm.get('id')?.invalid && newForm.get('id')?.touched">
+    Id is required and must be a positive number.
+  </div>
+  <label class="modal-window__input" for="name">Name:</label>
+  <input class="modal-window__input" id="name" formControlName="name">
+  <div *ngIf="newForm.get('name')?.invalid && newForm.get('name')?.touched">
+    Name is required and must be at least 3 characters long.
+  </div>
+  <label class="modal-window__input" for="username">UserName:</label>
+  <input class="modal-window__input" id="username" formControlName="username">
+  <div *ngIf="newForm.get('username')?.invalid && newForm.get('username')?.touched">
+    Name is required and must be at least 4 characters long.
+  </div>
+  <label class="modal-window__input" for="email">Email:</label>
+  <input class="modal-window__input" id="email" formControlName="email" type="email">
+  <div *ngIf="newForm.get('email')?.invalid && newForm.get('email')?.touched">
+    Please enter a valid email.
+  </div>
+  <button [mat-dialog-close]="newForm.value" class="modal-window__button" (click)="onSubmit()" >Создать пользователя</button>
+</form>

@@ -1,0 +1,16 @@
+.user-card{
+  width: 100%;
+  padding: 20px ;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 15px;
+  //grid-template-rows: 1fr 1fr 1fr;
+}
+.user-list__btn{
+  background: #373b3c;
+  width: 200px;
+}
+span{
+  color: #FFF;
+}
