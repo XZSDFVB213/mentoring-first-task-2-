@@ -3,6 +3,7 @@ import {UserInterface} from "../Interface/user.interface";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
 import {CreateUserComponent} from "../create-user/create-user.component";
 import {MatButton} from "@angular/material/button";
+import {UsersService} from "../service/users.service";
 
 @Component({
   selector: 'app-user-card',
@@ -20,6 +21,7 @@ export class UserCardComponent {
   btnDelClick() {
     this.onClick.emit(this.user);
   }
+  public userService = inject(UsersService)
   constructor(private dialog: MatDialog) {}
 
   openDialog() {
@@ -28,13 +30,11 @@ export class UserCardComponent {
       data: {id:this.user.id, name: this.user.name ,username: this.user.username , email:this.user.email  }
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.updateUser(result)
+      this.onUpdateUser(this.user,result)
     });
+
   }
-  updateUser(result:UserInterface){
-    this.user.id = result?.id ? result?.id : this.user.id;
-    this.user.name =result?.name ? result?.name : this.user.name;
-    this.user.username = result?.username ? result?.username : this.user.username;
-    this.user.email =result?.email ? result?.email : this.user.email;
+  onUpdateUser(user: UserInterface, result: UserInterface) {
+    this.userService.updateUser(this.user,result)
   }
 }

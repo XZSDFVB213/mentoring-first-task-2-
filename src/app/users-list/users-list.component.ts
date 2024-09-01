@@ -1,14 +1,22 @@
-import {Component, inject} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {UserCardComponent} from "../user-card/user-card.component";
 import {UsersApiService} from "../service/users-api.service";
-import {JsonPipe, NgClass, NgForOf} from "@angular/common";
+import {AsyncPipe, JsonPipe, NgClass, NgForOf} from "@angular/common";
 import {UserInterface} from "../Interface/user.interface";
 import {CreateUserComponent} from "../create-user/create-user.component";
-import {MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle} from "@angular/material/dialog";
+import {
+  MatDialog,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle
+} from "@angular/material/dialog";
 import {MatButtonModule} from "@angular/material/button";
 import {Dialog} from "@angular/cdk/dialog";
 import {LocalStorageService} from "../service/local-storage.service";
-import {tap} from "rxjs";
+import {BehaviorSubject, tap} from "rxjs";
+import {UsersService} from "../service/users.service";
 
 @Component({
   selector: 'app-users-list',
@@ -23,38 +31,35 @@ import {tap} from "rxjs";
     MatDialogContent,
     MatDialogActions,
     MatDialogClose,
-    MatButtonModule
+    MatButtonModule,
+    AsyncPipe
   ],
   templateUrl: './users-list.component.html',
   styleUrl: './users-list.component.scss'
 })
-export class UsersListComponent {
-  private readonly usersApiService = inject(UsersApiService)
-  public users:UserInterface[] = []
-
-  constructor() {
-    this.usersApiService.getUsers().subscribe(
-      res => this.users = res
-    )
-    console.log(this.users)
-  }
-
-  public deleteUser(userN:UserInterface):void{
-    console.log(this.users)
-    this.users = this.users.filter(user=> userN.id !== user.id)
-  }
-
+export class UsersListComponent implements OnInit{
+  public userService = inject(UsersService)
+  public readonly users$ = this.userService.users$
   readonly dialog = inject(MatDialog);
-
+  public localStorageService = inject(LocalStorageService)
   openDialog() {
     this.dialog.open(CreateUserComponent).afterClosed().pipe(
       tap((result)=>{
-        this.addUser(result)
+        this.onAddUser(result)
       })
     ).subscribe()
   }
-  public addUser(myForm:any){
-    this.users.push(myForm)
-    console.log("Hello. It's work")
+
+  ngOnInit(): void {
+    this.userService.loadData()
   }
+  onDeleteUser(userN:UserInterface){
+    this.userService.deleteUser(userN)
+  }
+  onAddUser(result:any){
+    this.userService.addUser(result)
+    console.log('123123123')
+
+  }
+
 }
